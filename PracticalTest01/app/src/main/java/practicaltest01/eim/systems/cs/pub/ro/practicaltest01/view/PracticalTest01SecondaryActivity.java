@@ -21,11 +21,13 @@ public class PracticalTest01SecondaryActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            if (view.getId() == R.id.ok_button) {
-                setResult(RESULT_OK);
-            }
-            if (view.getId() == R.id.cancel_button) {
-                setResult(RESULT_CANCELED);
+            switch (view.getId()) {
+                case R.id.ok:
+                    setResult(RESULT_OK);
+                    break;
+                case R.id.cancel:
+                    setResult(RESULT_CANCELED);
+                    break;
             }
             finish();
         }
@@ -36,16 +38,17 @@ public class PracticalTest01SecondaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test01_secondary);
 
-        ok = findViewById(R.id.ok_button);
+        ok = findViewById(R.id.ok);
         ok.setOnClickListener(buttonClickListener);
-        cancel = findViewById(R.id.cancel_button);
+        cancel = findViewById(R.id.cancel);
         cancel.setOnClickListener(buttonClickListener);
 
-        text = findViewById(R.id.number_of_clicks_text_view);
+        text = findViewById(R.id.textView);
+
         Intent intent = getIntent();
-        if (intent != null && intent.getExtras().containsKey(Constants.NUMBER_OF_CLICKS)) {
-            int numberOfClicks = intent.getIntExtra(Constants.NUMBER_OF_CLICKS, -1);
-            text.setText(String.valueOf(numberOfClicks));
+        if (intent != null && intent.getExtras().containsKey(Constants.CLICKS)) {
+            String clicks = intent.getStringExtra(Constants.CLICKS);
+            text.setText(clicks);
         }
     }
 }

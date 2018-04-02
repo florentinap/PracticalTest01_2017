@@ -1,9 +1,3 @@
 <resources>
     <string name="app_name">PracticalTest01</string>
-    <string name="navigate_button">NAVIGATE TO SECONDARY ACTIVITY</string>
-    <string name="button1">PRESS ME!</string>
-    <string name="button2">PRESS ME, TOO!</string>
-    <string name="ok">OK</string>
-    <string name="cancel">CANCEL</string>
-
 </resources>

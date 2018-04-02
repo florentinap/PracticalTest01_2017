@@ -4,12 +4,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import practicaltest01.eim.systems.cs.pub.ro.practicaltest01.R;
@@ -18,8 +18,8 @@ import practicaltest01.eim.systems.cs.pub.ro.practicaltest01.service.PracticalTe
 
 public class PracticalTest01MainActivity extends AppCompatActivity {
 
-    Button left_button, right_button, navigate_button;
-    EditText left_text, right_text;
+    Button leftBtn, rightBtn, navigate;
+    TextView leftText, rightText;
 
     private int serviceStatus = Constants.SERVICE_STOPPED;
     private IntentFilter intentFilter = new IntentFilter();
@@ -30,42 +30,41 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            int leftNumberOfClicks = Integer.valueOf(left_text.getText().toString());
-            int rightNumberOfClicks = Integer.valueOf(right_text.getText().toString());
+            int nr_left = Integer.valueOf(leftText.getText().toString());
+            int nr_right = Integer.valueOf(rightText.getText().toString());
 
             switch (view.getId()) {
                 case R.id.left_button:
-                    leftNumberOfClicks++;
-                    left_text.setText(String.valueOf(leftNumberOfClicks));
+                    nr_left ++;
+                    leftText.setText(String.valueOf(nr_left));
                     break;
                 case R.id.right_button:
-                    rightNumberOfClicks++;
-                    right_text.setText(String.valueOf(rightNumberOfClicks));
+                    nr_right ++;
+                    rightText.setText(String.valueOf(nr_right));
                     break;
                 case R.id.navigate_to_secondary_activity_button:
-                    Intent intent = new Intent(getApplicationContext(), PracticalTest01SecondaryActivity.class);
-                    int nr_clicks = leftNumberOfClicks + rightNumberOfClicks;
-                    intent.putExtra(Constants.NUMBER_OF_CLICKS, nr_clicks);
-                    startActivityForResult(intent, Constants.SECONDARY_ACTIVITY_REQUEST_CODE);
+                    Intent intent1 = new Intent(getApplicationContext(), PracticalTest01SecondaryActivity.class);
+                    int clicks = nr_left + nr_right;
+                    intent1.putExtra(Constants.CLICKS, String.valueOf(clicks));
+                    startActivityForResult(intent1, Constants.SECONDARY_ACTIVITY_REQUEST_CODE);
                     break;
             }
-            if (leftNumberOfClicks + rightNumberOfClicks > Constants.NUMBER_OF_CLICKS_THRESHOLD
-                    && serviceStatus == Constants.SERVICE_STOPPED) {
+
+            if (nr_left + nr_right >= Constants.PRAG && serviceStatus == Constants.SERVICE_STOPPED) {
                 Intent intent = new Intent(getApplicationContext(), PracticalTest01Service.class);
-                intent.putExtra(Constants.FIRST_NUMBER, leftNumberOfClicks);
-                intent.putExtra(Constants.SECOND_NUMBER, rightNumberOfClicks);
+                intent.putExtra(Constants.FIRST_NUMBER, nr_left);
+                intent.putExtra(Constants.SECOND_NUMBER, nr_right);
                 getApplicationContext().startService(intent);
                 serviceStatus = Constants.SERVICE_STARTED;
             }
         }
     }
-
     private MessageBroadcastReceiver messageBroadcastReceiver = new MessageBroadcastReceiver();
 
     private class MessageBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(Constants.BROADCAST_RECEIVER_TAG, intent.getStringExtra(Constants.BROADCAST_RECEIVER_EXTRA));
+            Log.d("[TEST]", intent.getStringExtra("message"));
         }
     }
 
@@ -74,30 +73,34 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_practical_test01_main);
 
-        left_button = findViewById(R.id.left_button);
-        left_button.setOnClickListener(buttonClickListener);
-        right_button = findViewById(R.id.right_button);
-        right_button.setOnClickListener(buttonClickListener);
-        navigate_button = findViewById(R.id.navigate_to_secondary_activity_button);
-        navigate_button.setOnClickListener(buttonClickListener);
+        leftBtn = findViewById(R.id.left_button);
+        leftBtn.setOnClickListener(buttonClickListener);
+        rightBtn = findViewById(R.id.right_button);
+        rightBtn.setOnClickListener(buttonClickListener);
+        navigate = findViewById(R.id.navigate_to_secondary_activity_button);
+        navigate.setOnClickListener(buttonClickListener);
 
-        left_text = findViewById(R.id.left_edit_text);
-        right_text = findViewById(R.id.right_edit_text);
+        leftText = findViewById(R.id.left_edit_text);
+        rightText = findViewById(R.id.right_edit_text);
 
         if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey("left_text")) {
-                left_text.setText(savedInstanceState.getString("left_text"));
+            if (savedInstanceState.containsKey("nr_left")) {
+                leftText.setText(savedInstanceState.getString("nr_left"));
             } else {
-                left_text.setText(String.valueOf(0));
+                leftText.setText(String.valueOf(0));
             }
-            if (savedInstanceState.containsKey("right_text")) {
-                right_text.setText(savedInstanceState.getString("right_text"));
+            if (savedInstanceState.containsKey("nr_right")) {
+                rightText.setText(savedInstanceState.getString("nr_right"));
             } else {
-                right_text.setText(String.valueOf(0));
+                rightText.setText(String.valueOf(0));
             }
         } else {
-            left_text.setText(String.valueOf(0));
-            right_text.setText(String.valueOf(0));
+            leftText.setText(String.valueOf(0));
+            rightText.setText(String.valueOf(0));
+        }
+
+        for (int index = 0; index < Constants.actionTypes.length; index++) {
+            intentFilter.addAction(Constants.actionTypes[index]);
         }
     }
 
@@ -105,8 +108,23 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
 
-        savedInstanceState.putString(Constants.LEFT_COUNT, left_text.getText().toString());
-        savedInstanceState.putString(Constants.RIGHT_COUNT, right_text.getText().toString());
+        savedInstanceState.putString(Constants.NR_LEFT, leftText.getText().toString());
+        savedInstanceState.putString(Constants.NR_RIGHT, rightText.getText().toString());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        if (savedInstanceState.containsKey("nr_left")) {
+            leftText.setText(savedInstanceState.getString("nr_left"));
+        } else {
+            leftText.setText(String.valueOf(0));
+        }
+        if (savedInstanceState.containsKey("nr_right")) {
+            rightText.setText(savedInstanceState.getString("nr_right"));
+        } else {
+            rightText.setText(String.valueOf(0));
+        }
     }
 
     @Override
@@ -134,4 +152,5 @@ public class PracticalTest01MainActivity extends AppCompatActivity {
         stopService(intent);
         super.onDestroy();
     }
+
 }

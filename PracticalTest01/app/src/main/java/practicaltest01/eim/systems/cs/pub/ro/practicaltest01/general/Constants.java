@@ -1,31 +1,27 @@
 package practicaltest01.eim.systems.cs.pub.ro.practicaltest01.general;
 
 /**
- * Created by Florentina on 30-Mar-18.
+ * Created by Florentina on 02-Apr-18.
  */
 
 public interface Constants {
-    final public static String LEFT_COUNT = "leftCount";
-    final public static String RIGHT_COUNT = "rightCount";
+    final public static String NR_LEFT = "nr_left";
+    final public static String NR_RIGHT = "nr_right";
 
-    final public static String NUMBER_OF_CLICKS = "numberOfClicks";
+    final public static String CLICKS = "clicks";
+
     final public static int SECONDARY_ACTIVITY_REQUEST_CODE = 1;
 
     final public static String FIRST_NUMBER = "firstNumber";
     final public static String SECOND_NUMBER = "secondNumber";
 
     final public static String[] actionTypes = {
-            "ro.pub.cs.systems.eim.practicaltest01.arithmeticmean",
-            "ro.pub.cs.systems.eim.practicaltest01.geometricmean"
+            "ro.pub.cs.systems.eim.practicaltest01var02.aritmeticmean",
+            "ro.pub.cs.systems.eim.practicaltest01var02.geometricmean"
     };
 
-    final public static int NUMBER_OF_CLICKS_THRESHOLD = 5;
     final public static int SERVICE_STOPPED = 0;
     final public static int SERVICE_STARTED = 1;
 
-    final public static String PROCESSING_THREAD_TAG = "[Processing Thread]";
-
-    final public static String BROADCAST_RECEIVER_EXTRA = "message";
-    final public static String BROADCAST_RECEIVER_TAG = "[Message]";
-
+    final public static int PRAG = 5;
 }

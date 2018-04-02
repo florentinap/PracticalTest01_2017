@@ -2,55 +2,49 @@ package practicaltest01.eim.systems.cs.pub.ro.practicaltest01.service;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Process;
 import android.util.Log;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 
 import practicaltest01.eim.systems.cs.pub.ro.practicaltest01.general.Constants;
 
 /**
- * Created by Florentina on 30-Mar-18.
+ * Created by Florentina on 02-Apr-18.
  */
 
 public class ProcessingThread extends Thread {
 
     private Context context = null;
     private boolean isRunning = true;
+    private Random rand = new Random();
 
-    private Random random = new Random();
-
-    private double arithmeticMean;
-    private double geometricMean;
+    private double aritmetic;
+    private double geometric;
 
     public ProcessingThread(Context context, int firstNumber, int secondNumber) {
         this.context = context;
 
-        arithmeticMean = (firstNumber + secondNumber) / 2;
-        geometricMean = Math.sqrt(firstNumber * secondNumber);
+        aritmetic = (firstNumber + secondNumber)/2;
+        geometric = Math.sqrt(firstNumber * secondNumber);
     }
 
     @Override
     public void run() {
-        Log.d(Constants.PROCESSING_THREAD_TAG, "Thread has started! PID: " + Process.myPid() + " TID: " + Process.myTid());
+        Log.d("[TEST]", "Thread has started!");
 
         while (isRunning) {
             sendMessage();
             sleep();
         }
 
-        Log.d(Constants.PROCESSING_THREAD_TAG, "Thread has stopped!");
+        Log.d("[TEST]", "Thread has stopped!");
     }
 
     private void sendMessage() {
         Intent intent = new Intent();
-        intent.setAction(Constants.actionTypes[random.nextInt(Constants.actionTypes.length)]);
-        intent.putExtra(Constants.BROADCAST_RECEIVER_EXTRA,
-                new Date(System.currentTimeMillis()) + " " + arithmeticMean + " " + geometricMean);
+        intent.setAction(Constants.actionTypes[rand.nextInt(Constants.actionTypes.length)]);
+        intent.putExtra("message", new Date(System.currentTimeMillis()) + " "  + aritmetic + " " + geometric);
         context.sendBroadcast(intent);
     }
 

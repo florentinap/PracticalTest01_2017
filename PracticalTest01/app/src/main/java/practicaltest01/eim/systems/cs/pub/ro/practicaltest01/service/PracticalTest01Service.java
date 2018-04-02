@@ -7,7 +7,7 @@ import android.os.IBinder;
 import practicaltest01.eim.systems.cs.pub.ro.practicaltest01.general.Constants;
 
 /**
- * Created by Florentina on 30-Mar-18.
+ * Created by Florentina on 02-Apr-18.
  */
 
 public class PracticalTest01Service extends Service {

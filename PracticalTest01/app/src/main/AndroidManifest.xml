@@ -12,15 +12,11 @@
         <activity android:name=".view.PracticalTest01MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.PracticalTest01SecondaryActivity">
-            <intent-filter>
-                <action android:name="ro.pub.cs.systems.eim.practicaltest01.intent.action.PracticalTest01SecondaryActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".view.PracticalTest01SecondaryActivity"></activity>
         <service
             android:name=".service.PracticalTest01Service"
             android:enabled="true"
